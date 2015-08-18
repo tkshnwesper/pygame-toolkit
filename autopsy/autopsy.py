@@ -1,71 +1,43 @@
-import pygame, sys
-import time as Time
+import pygame, sys, time
 
-def animate_linear(displaysurf, ptsFrom, ptsTo, time, colour):
+def animate_linear(displaysurf, ptsFrom, ptsTo, timems, colour):
 	if len(ptsFrom) == len(ptsTo):
-		top = left = sys.maxint
-		bottom = right = 0
-		for pt in ptsFrom:
-			if pt[0] < left:
-				left = pt[0]
-			#end
-			if pt[1] < top:
-				top = pt[1]
-			#end
-			if pt[0] > right:
-				right = pt[0]
-			#end
-			if pt[1] > bottom:
-				bottom = pt[1]
-			#end
-		#end
-		rw = right - left
-		rh = bottom - top
-		rect = pygame.Rect(top, left, rw, rh).inflate(15, 15)
-		surf = displaysurf.subsurface(rect).copy()
-		temp = ptsFrom[:]
 		delta = []
 		for i in range(0, len(ptsFrom)):
-			delta.append([(ptsTo[i][0] - ptsFrom[i][0]) / float(time), (ptsTo[i][1] - ptsFrom[i][1]) / float(time)])
+			delta.append([(ptsTo[i][0] - ptsFrom[i][0]) / float(timems), (ptsTo[i][1] - ptsFrom[i][1]) / float(timems)])
 		#end
-		sleeptime = 1.0 / time
+		temp = ptsFrom[:]
 		count = 0
+		sleeptime = 1.0 / timems
 		while count <= 1:
-			yatemp = temp[:]
-			temp = []
-			for j in range(0, len(yatemp)):
-				temp.append([yatemp[j][0] + delta[j][0], yatemp[j][1] + delta[j][1]])
-			#end
-			pygame.draw.polygon(displaysurf, colour, temp)
-			pygame.display.update()
-			Time.sleep(sleeptime)
-			displaysurf.blit(surf, rect)
 			top = left = sys.maxint
 			bottom = right = 0
 			for pt in temp:
 				if pt[0] < left:
 					left = pt[0]
-					ileft = temp.index(pt)
 				#end
 				if pt[1] < top:
 					top = pt[1]
-					itop = temp.index(pt)
 				#end
 				if pt[0] > right:
 					right = pt[0]
-					iright = temp.index(pt)
 				#end
 				if pt[1] > bottom:
 					bottom = pt[1]
-					ibottom = temp.index(pt)
 				#end
 			#end
 			rw = right - left
 			rh = bottom - top
-			rect = pygame.Rect(top, left, rw, rh).inflate(15, 15)
+			rect = pygame.Rect(left, top, rw, rh).inflate(3, 3)
+			print rect.left, rect.top, rect.height, rect.width
 			surf = displaysurf.subsurface(rect).copy()
+			pygame.draw.polygon(displaysurf, colour, temp)
+			time.sleep(sleeptime)
+			displaysurf.blit(surf, rect)
+			for j in range(0, len(temp)):
+				temp[j] = ([temp[j][0] + delta[j][0], temp[j][1] + delta[j][1]])
+			#end
 			count += sleeptime
 		#end
 	#end
 #end
-			
