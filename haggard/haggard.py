@@ -184,7 +184,6 @@ def haggard_rect_fill(displaysurf, rect, maxlen, maxangle, colour):
 		while True:
 			
 			if(sqrt((rpt[1] - ini2[1])**2 + (rpt[0] - ini2[0])**2) <= maxlen):
-				#pts.append(tuple(rpt))
 				break
 				#~
 			randangle = uniform(-maxangle, maxangle)
